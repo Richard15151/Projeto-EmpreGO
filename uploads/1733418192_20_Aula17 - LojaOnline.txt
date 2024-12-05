@@ -1,0 +1,18 @@
+CREATE DATABASE aula17_lojaonline;
+
+USE aula17_lojaonline;
+
+CREATE TABLE Produto (
+    idProduto INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10,2) NOT NULL,
+    estoque INT NOT NULL
+);
+
+CREATE TABLE Venda (
+    idVenda INT PRIMARY KEY AUTO_INCREMENT,
+    idProduto INT NOT NULL,
+    quantidade INT NOT NULL,
+    FOREIGN KEY (idProduto) REFERENCES Produto(idProduto)
+);

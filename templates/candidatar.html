@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="/candidatar/{{id_vaga}}" method="POST" style="margin-top: 50px; margin-bottom: 50px;"enctype="multipart/form-data"
+class="row needs-validation g-3" novalidate>
+    <h3>Forneça informações para se candidatar:</h3>
+    <div class="mb-3">
+        <label for="nome_candidato" class="form-label">Nome</label>
+        <input type="text" class="form-control" name="nome" required>
+        <div class="valid-feedback">
+            Parece bom!
+          </div>
+          <div class="invalid-feedback">
+            Por favor, preencha o seu nome.
+         </div>
+    </div>
+    <div class="mb-3">
+        <label for="email_candidato" class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" required>
+        <div class="valid-feedback">
+            Parece bom!
+          </div>
+          <div class="invalid-feedback">
+            Por favor, preencha o seu email.
+         </div>
+    </div>
+    <div class="mb-3">
+        <label for="telefone" class="form-label">Telefone</label>
+        <input type="text" id="telefone" class="form-control" name="telefone" required>
+        <div class="invalid-feedback">Telefone inválido. Use o formato (XX) XXXXX-XXXX.</div>
+    </div>
+    <div class="mb-3">
+        <h3>Envie seu currículo:</h3>
+        <input type="file" name="file">
+        {% if msg %}
+        <div class="mensagem">
+            <p>{{ msg }}</p>
+        </div>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Candidatar-se</button>
+    {% if msg_erro%} <p>{{msg_erro}}</p> {% endif %}
+  </form>
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
+<!-- Link do Input Mask -->
+<script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js"></script>
+<script>
+  Inputmask("(99)99999-9999").mask(document.getElementById("telefone")) //Mascara para o telefone
+</script>
+{% endblock %}

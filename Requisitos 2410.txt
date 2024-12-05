@@ -1,0 +1,5 @@
+adm:
+-Nova empresa
+-Editar empresa
+-Excluir empresa
+-Ativar/ desativar empresa

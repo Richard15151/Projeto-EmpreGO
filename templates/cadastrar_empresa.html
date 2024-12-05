@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form action="/cadastrar_empresa" method="post" class="row needs-validation g-3" style="margin-top: 50px; margin-bottom: 50px;" novalidate>
+    <h3>Cadastre a nova empresa:</h3>
+
+    <div class="mb-3">  
+        <label for="nome_empresa" class="form-label">Nome fantasia da Empresa</label>
+        <input type="text" class="form-control" name="nome_empresa" required>
+        <div class="valid-feedback">
+          Parece bom!
+        </div>
+        <div class="invalid-feedback">
+          Por favor, preencha o nome da empresa.
+       </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="cnpj" class="form-label">Cnpj da Empresa</label>
+        <input type="text" name="cnpj" min="0" id="cnpj" class="form-control" required>
+        <div class="invalid-feedback">CNPJ inválido. Use o formato XX.XXX.XXX/XXXX-XX.</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="telefone" class="form-label">Telefone de contato</label>
+        <input type="text" name="telefone" id="telefone" class="form-control" required>
+        <div class="invalid-feedback">Telefone inválido. Use o formato (XX) XXXXX-XXXX.</div>
+    </div>
+
+    <h2>Informações para acesso à plataforma</h2>
+    <div class="row mb-4">
+        <div class="col">
+          <div>
+            <label for="email" class="form-label">Email da empresa</label>
+            <input type="email" class="form-control" name="email"required/>
+            <div class="valid-feedback">
+              Parece bom!
+            </div>
+            <div class="invalid-feedback">
+              Por favor, preencha o email da empresa.
+           </div>
+          </div>
+        </div>
+        <div class="col">
+          <div>
+            <label for="senha" class="form-label">Senha</label>
+            <input type="text" class="form-control" name="senha"required/>
+            <div class="valid-feedback">
+              Parece bom!
+            </div>
+            <div class="invalid-feedback">
+              Por favor, preencha a senha da empresa.
+           </div>
+          </div>
+        </div>
+      </div>
+    <button type="submit" class="btn btn-primary">Cadastrar Empresa</button>
+    {% if msg_erro%} <p>{{msg_erro}}</p> {% endif %}
+  </form>
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
+<!-- Link do Input Mask -->
+<script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js"></script>
+<script>
+  Inputmask("99.999.999/9999-99").mask(document.getElementById("cnpj")) //Mascara para o cnpj
+  Inputmask("(99)99999-9999").mask(document.getElementById("telefone")) //Mascara para o telefone
+</script>
+{% endblock %}
+

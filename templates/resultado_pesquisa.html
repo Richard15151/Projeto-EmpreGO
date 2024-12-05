@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block title %}EmpreGO! - Resultado pesquisa{%
+endblock %} {% block content %}
+
+<h1 style="margin-top: 30px;">Resultados para "{{ palavra_chave }}"</h1>
+{% if vagas %}
+<div class="row mt-4">
+  {% for vaga in vagas %}
+  <div class="col-12 col-md-6 col-lg-4">
+    {% include 'card.html' %}
+</div>
+{% endfor %}
+</div>
+{% else %}
+<h2>Não há resultados para a pesquisa "{{ palavra_chave }}"</h2>
+{% endif %} 
+{% endblock %}

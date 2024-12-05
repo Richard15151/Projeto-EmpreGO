@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}EmpreGO! - Painel da Empresa{% endblock %}
+
+{% block content %}
+<!-- Background image -->
+<div
+class="p-5 text-center bg-image d-none d-md-block shadow"
+style="
+  background-image: url('../static/img/tela\ empresa.png');
+  height: 400px; margin-top: 25px; 
+"
+>
+<div class="mask" style="width: 100%;">
+  <div class="d-flex justify-content-left align-items-center h-100">
+    <div class="text-white">
+      <h1 class="mb-3"style="color: black; margin-left: 150px;">Bem vinda {{ nome_empresa }}!</h1>
+      <h4 class="mb-3"style="color: black; margin-left: 150px;">Cadastre, ative/inative, edite e exclue vagas!</h4>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="d-block d-md-none" style="margin-top: 30px">
+  <div style="display: flex; justify-content: center; align-items: center">
+    <div class="text-white">
+      <h1 class="mb-3" style="color: black">Bem vinda {{ nome_empresa }}!</h1>
+      <h4 class="mb-3" style="color: black">
+        Cadastre, ative/inative, edite e exclue vagas!
+      </h4>
+      {% if not session %}
+      <a
+        data-mdb-ripple-init
+        class="btn btn-primary btn-lg"
+        href="/login"
+        role="button"
+        style="color: white; margin-left: 35%"
+        >Login</a
+      >
+      {% endif %}
+    </div>
+  </div>
+</div>
+<!-- Background image -->
+<div class="container" style="margin-top: 50px;">
+    <div class="row">
+        <div class="col-12" style="display: flex; align-items: center; flex-direction: column;">
+            <h1>Painel da Empresa {{ nome_empresa }}</h1>
+            <p><a href="/cadastrar_vaga" class="btn btn-success">Cadastrar Nova Vaga</a></p>
+        </div>
+    </div>
+    <hr>
+    <div class="row mt-4">
+        <h2 class="style-5 mb-3 text-success">Vagas Ativas:</h2>
+        {% if vagas_ativas %}
+            {% for vaga in vagas_ativas %}
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ vaga.titulo }}</h5>
+                    <p class="card-text">
+                      <strong>Descrição:</strong> {{ vaga.descricao | truncate(50) }}<br>
+                      <strong>Formato:</strong> {{ vaga.formato }}<br>
+                      <strong>Tipo:</strong> {{ vaga.tipo }}
+                    </p>
+                    <a href="/editar_vaga/{{ vaga.id_vaga }}" class="btn btn-primary btn-sm me-2">Editar</a>
+                    <a href="/status_vaga/{{ vaga.id_vaga }}" class="btn btn-warning btn-sm" onclick="return confirm('Tem certeza que deseja inativar esta vaga?')">Inativar</a>
+                    <a href="/ver_candidatos/{{ vaga.id_vaga }}" class="btn btn-primary btn-sm me-2"> Ver candidatos</a>
+                  </div>
+                </div>                  
+              </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhuma vaga ativa no momento.</p>
+        {% endif %}
+    </div>
+    <hr>
+    <div class="row mt-4">
+        <h2 class="style-5 mb-3 text-danger">Vagas Inativas:</h2>
+        {% if vagas_inativas %}
+            {% for vaga in vagas_inativas %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ vaga.titulo }}</h5>
+                    <p class="card-text">
+                        <strong>Descrição:</strong> {{ vaga.descricao | truncate(50) }}<br>
+                        <strong>Formato:</strong> {{ vaga.formato }}<br>
+                        <strong>Tipo:</strong> {{ vaga.tipo }}
+                    </p>
+                    <a href="/editar_vaga/{{ vaga.id_vaga }}" class="btn btn-primary btn-sm me-5">Editar</a>
+                    <a href="/status_vaga/{{ vaga.id_vaga }}" class="btn btn-success btn-sm" onclick="return confirm('Tem certeza que deseja ativar esta vaga?')">Ativar</a>
+                    <a href="/excluir_vaga/{{ vaga.id_vaga }}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta vaga?')">Excluir</a>
+                    </div>
+                </div>                  
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhuma vaga inativa no momento.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

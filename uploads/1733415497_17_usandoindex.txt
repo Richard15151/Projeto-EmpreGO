@@ -1,0 +1,52 @@
+# Exclui o banco de dados "aula17" caso ele já exista, evitando conflitos
+DROP DATABASE IF EXISTS aula17;
+
+# Cria um novo banco de dados chamado "aula17"
+CREATE DATABASE aula17;
+
+# Seleciona o banco de dados "aula17" para uso
+USE aula17;
+
+# Cria a tabela "cliente" com colunas id, nome e email
+CREATE TABLE cliente (
+    id INT AUTO_INCREMENT PRIMARY KEY, # Chave primária com incremento automático
+    nome VARCHAR(100),                 # Coluna para armazenar o nome do cliente
+    email VARCHAR(100)                 # Coluna para armazenar o e-mail do cliente
+);
+
+# Altera o delimitador para "//" para permitir o uso de blocos no procedimento armazenado
+DELIMITER //
+
+# Cria um procedimento chamado "InsereClientes" que insere 1000 registros na tabela "cliente"
+CREATE PROCEDURE InsereClientes()
+BEGIN
+  DECLARE i INT DEFAULT 1; # Declara uma variável inteira 'i' iniciada em 1
+
+  # Loop que insere registros até que 'i' alcance 1000
+  WHILE i <= 1000 DO
+    INSERT INTO cliente (nome, email)
+    VALUES (
+        CONCAT('Cliente ', i),                # Gera um nome dinâmico como "Cliente 1", "Cliente 2"
+        CONCAT('cliente', i, '@email.com')    # Gera um e-mail como "cliente1@email.com", "cliente2@email.com"
+    );
+    SET i = i + 1; # Incrementa 'i' para o próximo loop
+  END WHILE;
+END //
+
+# Restaura o delimitador padrão ";"
+DELIMITER ;
+
+CALL InsereClientes(); #esse comando chama e executa a função
+
+#ATIVAR O MARCADOR DE TEMPO (perfilamento)
+SET profiling = 1;
+
+#buscar o email sem uso do index
+SELECT * FROM cliente WHERE email = 'cliente500@email.com';
+
+#criar um indice para o email
+CREATE INDEX idx_email ON cliente(email);
+
+#buscar o email com uso do index
+SELECT * FROM cliente WHERE email = 'cliente500@email.com';
+SHOW PROFILES;

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="display: flex; align-items: center; justify-content: center; text-align: center; margin-top: 20%;">
+    <div>
+        {% if 'adm' in session %}
+            <h2>AÇÕES DO ADM REALIZADAS COM SUCESSO!</h2>
+            <a href="/adm" class="btn btn-secondary">Voltar</a>
+        {% elif 'id_empresa' in session %}
+            <h2>AÇÕES DA EMPRESA REALIZADAS COM SUCESSO!</h2>
+            <a href="/empresa" class="btn btn-secondary">Voltar</a>
+        {% elif not session %}
+            <h2>CANDIDATURA REALIZADA COM SUCESSO!</h2>
+            <a href="/" class="btn btn-secondary">Voltar</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

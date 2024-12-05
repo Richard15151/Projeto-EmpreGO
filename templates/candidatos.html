@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block title %}EmpreGO! - Painel da Empresa{%
+endblock %} {% block content %}
+<div class="file-list-container"></div>
+<div class="container" style="margin-top: 50px">
+  <div class="row">
+    <div class="col-12">
+      <h1>Home de candidatos:</h1>
+      <p>Vizualize os candidatos à essa vaga</p>
+    </div>
+  </div>
+  <div class="container" id="candidatos">
+    <div class="row mt-4">
+      {% for candidato in candidatos %}
+      <!-- será utilizado um FOR (repetição) -->
+      <div class="col-12 col-md-4 col-lg-3">
+        <div class="card mb-4 shadow">
+          <div class="card-body">
+            <h5 class="card-title text-primary">{{ candidato.nome }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              email: {{ candidato.email }}
+            </h6>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Tel: {{ candidato.telefone }}
+            </h6>
+            <a
+              href="/download/{{ candidato.curriculo }}"
+              class="download btn btn-primary btn-sm me-2"
+              target="_blank"
+              >Baixar currículo</a
+            >
+            <a
+              href="/delete/{{ candidato.curriculo}}"
+              class="excluir btn btn-primary btn-sm me-2"
+              >Excluir</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% if not candidatos %}
+      <div class="col-12">
+        <p class="text-center">Nenhum candidato para essa vaga no momento.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
