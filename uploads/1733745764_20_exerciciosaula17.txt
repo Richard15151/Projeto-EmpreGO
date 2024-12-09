@@ -1,0 +1,39 @@
+-------EXERCÍCIO 1, criar uma view vw_notas
+CREATE VIEW vw_notas AS
+SELECT 
+	e.nomeEstudante AS Estudante,
+    m.nomeMateria AS Materia,
+    nf.nota AS Nota_final
+FROM 
+	notafinal nf
+JOIN
+	estudante e ON nf.idEstudante = e.idEstudante
+JOIN
+	materia m ON nf.idMateria = m.idMateria
+
+
+-SELECIONA TUDO DA VIEW, COMO SE ELA FOSSE UMA TABELA PRÉ-DEFINIDA
+SELECT * FROM cursinho.vw_notas;
+
+
+------EXERCÍCO 2, criar uma view vw_media
+CREATE VIEW vw_media AS
+SELECT
+	e.nomeEstudante AS Estudante,
+    AVG(nf.nota) AS Média
+FROM
+	notaFinal nf
+JOIN
+	estudante e ON nf.idEstudante = e.idEstudante
+GROUP BY 
+	e.nomeEstudante;
+
+SELECT * FROM vw_media;
+
+------EXERCÍCIO 3, criar uma view dos aprovados
+CREATE VIEW vw_aprovados AS
+SELECT * FROM vw_media WHERE Média >= 7
+	
+------EXERCÍCIO 4, criar uma view dos reprovados
+CREATE VIEW vw_reprovados AS 
+SELECT * FROM vw_media WHERE Média <7

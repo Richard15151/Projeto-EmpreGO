@@ -269,15 +269,41 @@ def excluir_empresa(id_empresa):
     
     try:
         conexao, cursor = conectar_db()
-        # EXCLUINDO VAGAS RELACIONADAS DA EMPRESA EXCLUIDA
-        comandoSQL = 'DELETE FROM vaga WHERE id_empresa=%s'
+        comandoSQL = '''SELECT curriculo FROM candidato
+        WHERE id_vaga IN (
+        SELECT id_vaga
+        FROM vaga
+        WHERE id_empresa = %s
+        );
+        '''
+        cursor.execute(comandoSQL, (id_empresa,))
+        curriculos = cursor.fetchall()
+        for curriculo in curriculos:
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], curriculo['curriculo']))
+        conexao.commit()
+
+        #EXCLUIR AS VAGAS RELACIONADAS NA EMPRESA EXCLUIDA
+        comandoSQL = '''DELETE FROM candidato
+        WHERE id_vaga IN (
+        SELECT id_vaga
+        FROM vaga
+        WHERE id_empresa = %s
+        );
+        '''
         cursor.execute(comandoSQL, (id_empresa,))
         conexao.commit()
-        # EXCLUIR CADASTRO DA EMPRESA:
-        comandoSQL = 'DELETE FROM empresa WHERE id_empresa=%s'
+
+
+        #EXCLUIR AS VAGAS RELACIONADAS NA EMPRESA EXCLUIDA
+        comandoSQL = 'DELETE FROM vaga WHERE id_empresa = %s'
         cursor.execute(comandoSQL, (id_empresa,))
         conexao.commit()
-        return redirect ('/adm')
+
+    #EXCLUIR CADASTRO DA EMPRESA
+        comandoSQL = 'DELETE FROM empresa WHERE id_empresa = %s'
+        cursor.execute(comandoSQL, (id_empresa,))
+        conexao.commit()
+        return redirect('/adm')
     except Error as erro:
         return f"Erro de DB: {erro}"
     except Exception as erro:
@@ -456,11 +482,26 @@ def excluir_vaga(id_vaga):
 
     try:
         conexao, cursor = conectar_db()
-        #DELETANDO CURRICULOS DA VAGA
+
+        # Primeiro, obter todos os currículos associados a esta vaga
+        comandoSQL = 'SELECT curriculo FROM candidato WHERE id_vaga = %s'
+        cursor.execute(comandoSQL, (id_vaga,))
+        curriculos = cursor.fetchall()
+
+        # Excluir os arquivos
+        for curriculo in curriculos:
+            nome_arquivo = curriculo['curriculo']
+            if nome_arquivo:
+                try:
+                    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], nome_arquivo))
+                except OSError as e:
+                    print(f"Erro ao remover arquivo: {e}")
+                    
+        #EXCLUIR AS VAGAS RELACIONADAS NA EMPRESA EXCLUIDA
         comandoSQL = 'DELETE FROM candidato WHERE id_vaga = %s'
         cursor.execute(comandoSQL, (id_vaga,))
         conexao.commit()
-        #DELETANDO A VAGA
+
         comandoSQL = 'DELETE FROM vaga WHERE id_vaga = %s AND status = "inativa"'
         cursor.execute(comandoSQL, (id_vaga,))
         conexao.commit()
