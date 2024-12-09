@@ -588,7 +588,9 @@ def pesquisar():
         JOIN empresa ON vaga.id_empresa = empresa.id_empresa
         WHERE vaga.status = 'ativa' AND (
         vaga.titulo LIKE %s OR
-        vaga.descricao LIKE %s
+        vaga.descricao LIKE %s OR
+        vaga.tipo LIKE %s OR
+        vaga.formato LIKE %s
         )
         '''
         cursor.execute(comandoSQL, (f'%{palavra_chave}%', f'%{palavra_chave}%'))
